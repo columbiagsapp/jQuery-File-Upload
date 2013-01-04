@@ -269,14 +269,17 @@ function jquery_file_uploader_upload() {
 
     global $base_url, $user;
 
+    $fileUploadsPath = variable_get('file_public_path', conf_path() . '/files') . '/file_uploads/';
+    $userFileUploadsPath = $fileUploadsPath . $user->uid;
     //check for folders
     $current_directory = getcwd();
-    if (!file_exists($current_directory . '/' . variable_get('file_public_path', conf_path() . '/files') . '/file_uploads')) {
-      $result = mkdir($current_directory . '/' . variable_get('file_public_path', conf_path() . '/files') . '/file_uploads');
+    if (!file_exists($current_directory . '/' . $fileUploadsPath)) {
+      $result = mkdir($current_directory . '/' . $fileUploadsPath);
     }
-    if (!file_exists($current_directory . '/' . variable_get('file_public_path', conf_path() . '/files') . '/file_uploads/' . $user->uid)) {
-      $result = mkdir($current_directory . '/' . variable_get('file_public_path', conf_path() . '/files') . '/file_uploads/' . $user->uid);
+    if (!file_exists($current_directory . '/' . $userFileUploadsPath)) {
+      $result = mkdir($current_directory . '/' . $userFileUploadsPath);
     }
+
 
     //github.com/troyth because the module doesn't check if the file already exists,
     //i've hacked it here so that it appends a 6 digit random number to the filename
@@ -291,7 +294,7 @@ function jquery_file_uploader_upload() {
 
     //$ok = move_uploaded_file($_FILES['files']['tmp_name'][0], 'sites/default/files/file_uploads/'. $user->uid . '/' . $secure_file_name);
     $file = (object) array(
-                'uid' => 1,
+                'uid' => $user->uid,//github.com/troyth changed uid to current user uid instead of admin
                 'uri' => drupal_realpath($_FILES['files']['tmp_name'][0]),
                 'filemime' => file_get_mimetype(drupal_realpath($_FILES['files']['tmp_name'][0])),
                 'status' => 1,
@@ -300,6 +303,8 @@ function jquery_file_uploader_upload() {
 
     if ($ok) {
       //add node
+      // github.com/troyth removed the add node functionality because I just want to send it to the database
+      /*
       $node = new StdClass();
       $filenamexx = explode(".", $_FILES['files']['name'][0]);//github.com/troyth i don't like this, what if filename has multiple periods?
       $node->type = 'jquery_uploader_node';
@@ -318,15 +323,16 @@ function jquery_file_uploader_upload() {
                   'file_size' => floatval($_FILES['files']['size'][0]),
               ))
               ->execute();
+      */
       ///////////////////////////////////////////
       $token = drupal_get_token($secure_file_name);
 
-      $filesForMainJS = $base_url . '/sites/default/files/file_uploads/' . $user->uid . '/' . $secure_file_name;
+      $filesForMainJS = $base_url . '/' . $userFileUploadsPath . '/' . $secure_file_name;
 
       $file = array(
           'name' => $_FILES['files']['name'][0],
           'size' => $_FILES['files']['size'][0],
-          'url' => $base_url . '/sites/default/files/file_uploads/' . $user->uid . '/' . $secure_file_name,
+          'url' => $base_url . $userFileUploadsPath . '/' . $secure_file_name,
           'thumbnail_url' => image_style_url('thumbnail', file_build_uri('/file_uploads/' . $user->uid . '/' . $secure_file_name)),
           'delete_url' => $base_url . '/jquery_file_upload/delete/' . $secure_file_name . '/' . $token,
           'delete_type' => 'DELETE',
