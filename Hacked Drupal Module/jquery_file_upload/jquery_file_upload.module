@@ -114,7 +114,8 @@ function jquery_file_upload_block_view($delta = '') {
   drupal_add_js( base_path() . drupal_get_path('module', 'jquery_file_upload') .'/js/jquery.fileupload.js');
   drupal_add_js( base_path() . drupal_get_path('module', 'jquery_file_upload') .'/js/jquery.fileupload-fp.js');
   drupal_add_js( base_path() . drupal_get_path('module', 'jquery_file_upload') .'/js/jquery.fileupload-ui.js');
-  drupal_add_js( base_path() . drupal_get_path('module', 'jquery_file_upload') .'/main.js');
+  // github.com/troyth moved main.js into the theme so I can work with Backbone.js objects and methods
+  //drupal_add_js( base_path() . drupal_get_path('module', 'jquery_file_upload') .'/main.js');
 
   return $block;
 }
@@ -277,7 +278,8 @@ function jquery_file_uploader_upload() {
       $result = mkdir($current_directory . '/' . variable_get('file_public_path', conf_path() . '/files') . '/file_uploads/' . $user->uid);
     }
 
-    $secure_file_name = file_munge_filename($_FILES['files']['name'][0], "gif jpeg jpg png tiff asf avi mpeg mpg wmv vob mov mp4 flv txt doc docx xls xlsx ppt pptx mp3");
+    //github.com/troyth added pdf to the acceptable file extensions
+    $secure_file_name = file_munge_filename($_FILES['files']['name'][0], "gif jpeg jpg png tiff asf avi mpeg mpg wmv vob mov mp4 flv txt doc docx xls xlsx ppt pptx mp3 pdf");
 
     //$ok = move_uploaded_file($_FILES['files']['tmp_name'][0], 'sites/default/files/file_uploads/'. $user->uid . '/' . $secure_file_name);
     $file = (object) array(
@@ -313,8 +315,9 @@ function jquery_file_uploader_upload() {
       ///////////////////////////////////////////
       $token = drupal_get_token($secure_file_name);
 
-      //$filesForMainJS = array();
       $filesForMainJS = $base_url . '/sites/default/files/file_uploads/' . $user->uid . '/' . $secure_file_name;
+
+      $course_nid = $_SERVER['REQUEST_URI'];
 
       $file = array(
           'name' => $_FILES['files']['name'][0],
