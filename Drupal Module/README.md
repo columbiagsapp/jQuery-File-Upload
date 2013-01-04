@@ -20,5 +20,7 @@ If I was a better Drupal developer, I would probably post a patch to a Drupal fo
   * delete_type
   * files[] //an array that I added to be compliant with the done() method in jquery.fileupload-ui.js, it's redundant with url
 
+## Note: I will not be maintaining this, it's just public to help those it might help
+
 ## License
 Released under the [MIT license](http://www.opensource.org/licenses/MIT).
