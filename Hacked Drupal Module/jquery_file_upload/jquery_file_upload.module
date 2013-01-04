@@ -278,6 +278,14 @@ function jquery_file_uploader_upload() {
       $result = mkdir($current_directory . '/' . variable_get('file_public_path', conf_path() . '/files') . '/file_uploads/' . $user->uid);
     }
 
+    //github.com/troyth because the module doesn't check if the file already exists,
+    //i've hacked it here so that it appends a 6 digit random number to the filename
+    //so that files of the same name will remain unique
+    $filename_ext_pos = strrpos($_FILES['files']['name'][0], '.');
+    $filename_ext = substr($_FILES['files']['name'][0], $filename_ext_pos);
+    $filename_name = substr($_FILES['files']['name'][0], 0, $filename_ext_pos);
+    $_FILES['files']['name'][0] = $filename_name . '-' . rand(100000,999999) . $filename_ext;
+
     //github.com/troyth added pdf to the acceptable file extensions
     $secure_file_name = file_munge_filename($_FILES['files']['name'][0], "gif jpeg jpg png tiff asf avi mpeg mpg wmv vob mov mp4 flv txt doc docx xls xlsx ppt pptx mp3 pdf");
 
@@ -291,11 +299,9 @@ function jquery_file_uploader_upload() {
     $ok = file_copy($file, file_build_uri('/file_uploads/' . $user->uid . '/' . $secure_file_name));
 
     if ($ok) {
-
-
       //add node
       $node = new StdClass();
-      $filenamexx = explode(".", $_FILES['files']['name'][0]);
+      $filenamexx = explode(".", $_FILES['files']['name'][0]);//github.com/troyth i don't like this, what if filename has multiple periods?
       $node->type = 'jquery_uploader_node';
       $node->uid = $user->uid;
       $node->status = 1;
@@ -316,8 +322,6 @@ function jquery_file_uploader_upload() {
       $token = drupal_get_token($secure_file_name);
 
       $filesForMainJS = $base_url . '/sites/default/files/file_uploads/' . $user->uid . '/' . $secure_file_name;
-
-      $course_nid = $_SERVER['REQUEST_URI'];
 
       $file = array(
           'name' => $_FILES['files']['name'][0],
