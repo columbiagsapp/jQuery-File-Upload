@@ -174,8 +174,7 @@ function jquery_file_upload_form($form, &$form_state) {
   );
 
 /* github.com/troyth updated these from the latest at https://github.com/blueimp/jQuery-File-Upload/blob/master/index.html */
-  /*
-  //github.com/troyth this seems to be just for the blueimp's image gallery project
+
   $form['#suffix'] = '<!-- modal-gallery is the modal dialog used for the image gallery -->
 <div id="modal-gallery" class="modal modal-gallery hide fade" data-filter=":odd" tabindex="-1">
     <div class="modal-header">
@@ -262,7 +261,7 @@ function jquery_file_upload_form($form, &$form_state) {
     </tr>
 {% } %}
 </script>';
-*/
+
 
   return $form;
 }
