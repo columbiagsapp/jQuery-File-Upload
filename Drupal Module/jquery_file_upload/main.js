@@ -76,7 +76,7 @@ function init_fileuploader(vars){
       
       jQuery.ajax({
         type: "POST",
-        url: base_path+'jquery_file_upload/get_remaining_space',
+        url: vars.base_path+'jquery_file_upload/get_remaining_space', // github.com/troyth added vars.
         success: function(data) {
           space_allowed = data;
         }});
