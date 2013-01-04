@@ -98,7 +98,7 @@ function jquery_file_upload_block_view($delta = '') {
   $js_vars->max_file_size = variable_get('max_file_size_' . $final_role, 0) * 1024 * 1024;
   $js_vars->space_remaining = variable_get('max_quota_' . $final_role, 0) * 1024 * 1024 - $space_taken;
   $js_vars->base_path = base_path();// github.com/troyth added
-  drupal_add_js("jQuery(function(){ init_fileuploader(" . json_encode($js_vars) . "); });", "inline");
+  drupal_add_js("jQuery(function(){ config_fileuploader(" . json_encode($js_vars) . "); });", "inline");
   
   /* Added by github.com/troyth and removed from jquery_file_upload_form() */
   drupal_add_js( base_path() . drupal_get_path('module', 'jquery_file_upload') .'/js/vendor/jquery.ui.widget.js');
@@ -130,12 +130,12 @@ function jquery_file_upload_form($form, &$form_state) {
 
   $form['#attributes'] = array('enctype' => 'multipart/form-data');
 
-  $form['#action'] = 'jquery_file_upload/upload';
+  $form['#action'] = '/jquery_file_upload/upload';//added a preceding / to make sure it stays relative to the base path
 
   /* github.com/troyth updated these from the latest at https://github.com/blueimp/jQuery-File-Upload/blob/master/index.html */
   $form['formhtml'] = array(
       '#markup' => '<div class="row fileupload-buttonbar">
-            <div class="span7">
+            <div class="span4">
                 <!-- The fileinput-button span is used to style the file input field as button -->
                 <span class="btn btn-success fileinput-button">
                     <i class="icon-plus icon-white"></i>
@@ -157,7 +157,7 @@ function jquery_file_upload_form($form, &$form_state) {
                 <input type="checkbox" class="toggle">
             </div>
             <!-- The global progress information -->
-            <div class="span5 fileupload-progress fade">
+            <div class="span2 fileupload-progress fade">
                 <!-- The global progress bar -->
                 <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                     <div class="bar" style="width:0%;"></div>
