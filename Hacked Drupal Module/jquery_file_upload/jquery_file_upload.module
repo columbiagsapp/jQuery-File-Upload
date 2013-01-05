@@ -107,8 +107,8 @@ function jquery_file_upload_block_view($delta = '') {
   drupal_add_js( 'http://blueimp.github.com/JavaScript-Canvas-to-Blob/canvas-to-blob.min.js', 'external');
 
   /* Don't think I need these, at least not the first */
-  drupal_add_js( 'http://blueimp.github.com/cdn/js/bootstrap.min.js', 'external');
-  drupal_add_js( 'http://blueimp.github.com/Bootstrap-Image-Gallery/js/bootstrap-image-gallery.min.js', 'external');
+  //drupal_add_js( 'http://blueimp.github.com/cdn/js/bootstrap.min.js', 'external');
+  //drupal_add_js( 'http://blueimp.github.com/Bootstrap-Image-Gallery/js/bootstrap-image-gallery.min.js', 'external');
 
   drupal_add_js( base_path() . drupal_get_path('module', 'jquery_file_upload') .'/js/jquery.iframe-transport.js');
   drupal_add_js( base_path() . drupal_get_path('module', 'jquery_file_upload') .'/js/jquery.fileupload.js');
@@ -158,7 +158,7 @@ function jquery_file_upload_form($form, &$form_state) {
                   <i class="icon-trash icon-white"></i>
                   <span>Delete</span>
               </button>
-              <input type="checkbox" class="toggle">
+              <input type="checkbox" name="isAssignment" value="isAssign" class="toggle"> Check if an assignment <i class="icon-check"></i>
             </div>
             <!-- The global progress information -->
             <div class="span2 fileupload-progress fade">
@@ -339,6 +339,13 @@ function jquery_file_uploader_upload() {
 
       $filesForMainJS = $base_url . '/' . $userFileUploadsPath . '/' . $secure_file_name;
 
+      if(isset($_POST['isAssignment']) && $_POST['isAssignment'] == 'isAssign'  ) 
+      {
+        $is_assign = true;
+      }else{
+        $is_assign = false;
+      }
+
       $file = array(
           'name' => $_FILES['files']['name'][0],
           'size' => $_FILES['files']['size'][0],
@@ -347,6 +354,8 @@ function jquery_file_uploader_upload() {
           'delete_url' => $base_url . '/jquery_file_upload/delete/' . $secure_file_name . '/' . $token,
           'delete_type' => 'DELETE',
           'files' => array($filesForMainJS),
+          'file_type' => substr($filename_ext,1),
+          'is_assignment' => $is_assign,
       );
       drupal_json_output($file);
     }
