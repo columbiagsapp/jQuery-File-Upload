@@ -134,12 +134,13 @@ function jquery_file_upload_form($form, &$form_state) {
 
   /* github.com/troyth updated these from the latest at https://github.com/blueimp/jQuery-File-Upload/blob/master/index.html */
   $form['formhtml'] = array(
-      '#markup' => '<div id="fileupload-modal" class="modal hide fade fileupload-buttonbar span7" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      '#markup' => '<div id="fileupload-modal" class="modal hide fade fileupload-buttonbar span9" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-header">
-            Upload a File
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Upload a File</h3>
           </div>
           <div class="modal-body">
-            <div class="span4">
+            <div class="span5">
               <!-- The fileinput-button span is used to style the file input field as button -->
               <span class="btn btn-success fileinput-button">
                   <i class="icon-plus icon-white"></i>
@@ -161,7 +162,7 @@ function jquery_file_upload_form($form, &$form_state) {
               <input type="checkbox" name="isAssignment" value="isAssign" class="toggle"> Check if an assignment <i class="icon-check"></i>
             </div>
             <!-- The global progress information -->
-            <div class="span2 fileupload-progress fade">
+            <div class="span3 fileupload-progress fade">
               <!-- The global progress bar -->
               <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
                   <div class="bar" style="width:0%;"></div>
@@ -228,6 +229,12 @@ function jquery_file_upload_form($form, &$form_state) {
                     <span>Start</span>
                 </button>
             {% } %}</td>
+
+            <td class="start">{% if (!o.options.autoUpload) { %}
+                <input type="checkbox" name="isAssignment" value="isAssign" class="toggle">&nbsp;assignment</i>
+            {% } %}</td>
+
+
         {% } else { %}
             <td colspan="2"></td>
         {% } %}
@@ -237,6 +244,7 @@ function jquery_file_upload_form($form, &$form_state) {
                 <span>Cancel</span>
             </button>
         {% } %}</td>
+
     </tr>
 {% } %}
 </script>
@@ -349,7 +357,7 @@ function jquery_file_uploader_upload() {
       $file = array(
           'name' => $_FILES['files']['name'][0],
           'size' => $_FILES['files']['size'][0],
-          'url' => $base_url . $userFileUploadsPath . '/' . $secure_file_name,
+          'url' => $base_url . '/' . $userFileUploadsPath . '/' . $secure_file_name,
           'thumbnail_url' => image_style_url('thumbnail', file_build_uri('/file_uploads/' . $user->uid . '/' . $secure_file_name)),
           'delete_url' => $base_url . '/jquery_file_upload/delete/' . $secure_file_name . '/' . $token,
           'delete_type' => 'DELETE',
