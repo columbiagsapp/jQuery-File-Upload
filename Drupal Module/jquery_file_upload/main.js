@@ -24,6 +24,9 @@
 })(jQuery);*/
 var space_allowed = 0;
 function init_fileuploader(vars){
+  console.log('vars: '+ vars);
+  console.dir(vars);
+
   space_allowed = vars.space_remaining;
   
   var types = vars.filetypes;
@@ -71,6 +74,7 @@ function init_fileuploader(vars){
       }
       //total_bytes_cal = 0;
     },
+
     completed: 
       function(e, data){
       
@@ -80,6 +84,10 @@ function init_fileuploader(vars){
         success: function(data) {
           space_allowed = data;
         }});
+      
+
+      console.log('returned!');
+      console.dir(data);
     }
   });
   
