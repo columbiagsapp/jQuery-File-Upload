@@ -308,7 +308,7 @@ function jquery_file_uploader_upload() {
     $_FILES['files']['name'][0] = $filename_name . '-' . rand(100000,999999) . $filename_ext;
 
     //github.com/troyth added pdf to the acceptable file extensions
-    $secure_file_name = file_munge_filename($_FILES['files']['name'][0], "gif jpeg jpg png tiff asf avi mpeg mpg wmv vob mov mp4 flv txt doc docx xls xlsx ppt pptx mp3 pdf");
+    $secure_file_name = file_munge_filename($_FILES['files']['name'][0], "gif jpeg jpg png tiff asf avi mpeg mpg wmv vob mov mp4 flv txt doc docx xls xlsx ppt pptx mp3 pdf gh 3dm zip");
 
     //$ok = move_uploaded_file($_FILES['files']['tmp_name'][0], 'sites/default/files/file_uploads/'. $user->uid . '/' . $secure_file_name);
     $file = (object) array(
